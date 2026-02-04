@@ -1,7 +1,7 @@
 
 import React, { useState, useRef, useEffect } from 'react';
-import { SHORTS_DATA, THEME } from '../constants';
-import { Heart, MessageCircle, Share2, Bookmark, MoreVertical, Crown, Volume2, VolumeX, Play, Pause, X, Send, User } from 'lucide-react';
+import { SHORTS_DATA, APP_NAME } from '../constants';
+import { Heart, MessageCircle, Share2, Volume2, VolumeX, Play, Pause, X, Send, User, CheckCircle2 } from 'lucide-react';
 import { Short, Comment } from '../types';
 
 interface CommentDrawerProps {
@@ -46,7 +46,7 @@ const CommentDrawer: React.FC<CommentDrawerProps> = ({ isOpen, onClose, comments
               </div>
               <div className="flex-1">
                 <div className="flex items-center justify-between mb-1">
-                  <span className="text-[13px] font-black text-white tracking-tight">{comment.userName}</span>
+                  <span className="text-[13px] font-black text-white tracking-tight uppercase">{comment.userName}</span>
                   <span className="text-[9px] text-[#555550] font-medium">{comment.timestamp}</span>
                 </div>
                 <p className="text-[13px] text-[#A0A096] leading-relaxed font-medium">
@@ -76,7 +76,7 @@ const CommentDrawer: React.FC<CommentDrawerProps> = ({ isOpen, onClose, comments
           <button 
             type="submit"
             disabled={!newComment.trim()}
-            className="w-12 h-12 bg-[#FFD400] rounded-full flex items-center justify-center text-black disabled:opacity-30 active:scale-90 transition-transform"
+            className="w-12 h-12 bg-[#FFD400] rounded-full flex items-center justify-center text-black disabled:opacity-30 active:scale-95 transition-transform"
           >
             <Send size={18} />
           </button>
@@ -158,10 +158,9 @@ const ShortVideoItem: React.FC<ShortVideoItemProps> = ({ short, isMuted, onToggl
   return (
     <div 
       data-id={short.id}
-      className="h-full w-full relative snap-start overflow-hidden bg-black flex flex-col"
+      className="h-full w-full relative snap-start snap-always overflow-hidden bg-black flex flex-col"
       onClick={togglePlayback}
     >
-      {/* Video Container - Uses object-contain to show "PURA VIDEO" as requested */}
       <div className="flex-1 w-full relative flex items-center justify-center bg-black">
         {short.videoUrl ? (
           <video 
@@ -177,7 +176,6 @@ const ShortVideoItem: React.FC<ShortVideoItemProps> = ({ short, isMuted, onToggl
           <img src={short.videoThumbnail} alt={short.title} className="w-full h-full object-contain" />
         )}
         
-        {/* Play/Pause Overlay Indicator */}
         {showStatusIndicator && (
           <div className="absolute inset-0 flex items-center justify-center z-50 pointer-events-none animate-in zoom-in fade-out duration-500">
             <div className="bg-black/40 p-8 rounded-full backdrop-blur-sm">
@@ -187,43 +185,48 @@ const ShortVideoItem: React.FC<ShortVideoItemProps> = ({ short, isMuted, onToggl
         )}
       </div>
 
-      {/* Side Actions - Hidden/Minimized to match the clean screenshot look */}
       <div className="absolute right-4 bottom-32 flex flex-col items-center space-y-6 z-30 side-actions">
         <button onClick={toggleLike} className="flex flex-col items-center">
           <Heart size={28} className={hasLiked ? 'text-[#FFD400] drop-shadow-lg' : 'text-white'} fill={hasLiked ? '#FFD400' : 'none'} />
-          <span className="text-[11px] font-bold text-white mt-1">{hasLiked ? 1 : 0}</span>
+          <span className="text-[11px] font-bold text-white mt-1 uppercase">{hasLiked ? 1 : 0}</span>
         </button>
         <button onClick={() => setIsCommentsOpen(true)} className="flex flex-col items-center">
           <MessageCircle size={28} className="text-white" />
-          <span className="text-[11px] font-bold text-white mt-1">{localComments.length}</span>
+          <span className="text-[11px] font-bold text-white mt-1 uppercase">{localComments.length}</span>
         </button>
         <Share2 size={28} className="text-white" />
       </div>
 
-      {/* Title/Category Overlay */}
       <div className="absolute bottom-28 left-6 right-20 z-30 pointer-events-none">
         <div className="flex items-center space-x-2 mb-2">
-          <div className="px-2 py-0.5 rounded-md bg-[#FFD400] text-black text-[8px] font-black tracking-widest uppercase">
+          <div className="px-2 py-0.5 rounded-md bg-[#FFD400] text-black text-[8px] font-black tracking-widest uppercase shadow-lg">
             {short.category}
           </div>
-          <span className="text-[13px] font-black text-white uppercase tracking-tight">VaaniFM</span>
+          <div className="flex items-center">
+            <span className="text-[13px] font-black text-white uppercase tracking-tight">{APP_NAME}</span>
+            <CheckCircle2 
+              size={13} 
+              className="text-[#FFD400] ml-1" 
+              fill="#FFD400" 
+              fillOpacity={0.2}
+              strokeWidth={3}
+            />
+          </div>
         </div>
-        <h3 className="text-[16px] font-bold text-white leading-tight drop-shadow-md">{short.title}</h3>
+        <h3 className="text-[16px] font-bold text-white leading-tight drop-shadow-md uppercase tracking-tight">{short.title}</h3>
       </div>
 
-      {/* Pure Black Comment Bar Area - Matching User Screenshot */}
       <div className="h-20 bg-black flex items-center justify-center px-4 bottom-comment-bar border-t border-white/[0.03]">
         <div 
           onClick={() => setIsCommentsOpen(true)}
           className="w-full h-11 bg-[#1C1C18] rounded-full flex items-center px-6 cursor-pointer border border-white/5"
         >
-          <span className="text-[#555550] text-[13px] font-medium">Add comment...</span>
+          <span className="text-[#555550] text-[13px] font-black uppercase tracking-widest">Add a voice...</span>
         </div>
       </div>
 
-      {/* Mute Toggle */}
       <div className="absolute top-6 right-6 z-40">
-        <button onClick={(e) => { e.stopPropagation(); onToggleMute(); }} className="w-10 h-10 rounded-full bg-black/20 backdrop-blur-md border border-white/10 flex items-center justify-center text-white">
+        <button onClick={(e) => { e.stopPropagation(); onToggleMute(); }} className="w-10 h-10 rounded-full bg-black/20 backdrop-blur-md border border-white/10 flex items-center justify-center text-white active:scale-90 transition-transform">
           {isMuted ? <VolumeX size={18} /> : <Volume2 size={18} />}
         </button>
       </div>
