@@ -7,51 +7,40 @@
     <link rel="preconnect" href="https://fonts.googleapis.com">
     <link rel="preconnect" href="https://fonts.gstatic.com" crossorigin>
     <link href="https://fonts.googleapis.com/css2?family=Outfit:wght@100;400;700;900&family=Cinzel:wght@700;900&display=swap" rel="stylesheet">
-    <!-- Tailwind CSS for robust layout processing -->
     <script src="https://cdn.tailwindcss.com"></script>
     <script>
       tailwind.config = {
         theme: {
           extend: {
-            fontFamily: { 
+            fontFamily: {
               sans: ['Outfit', 'sans-serif'],
-              serif: ['Cinzel', 'serif']
+              serif: ['Cinzel', 'serif'],
             },
-            colors: { primary: '#FFD400', dark: '#0E0E0B' }
-          }
-        }
+            colors: {
+              primary: '#FFD400',
+              dark: '#0E0E0B',
+            },
+          },
+        },
       }
     </script>
-    <style>
-        body { 
-            margin: 0; 
-            padding: 0; 
-            background-color: #000000; 
-            width: 100vw; 
-            height: 100vh;
-            overflow: hidden;
-            font-family: 'Outfit', sans-serif;
+    <style type="text/tailwindcss">
+      @layer base {
+        body {
+          @apply bg-black text-white antialiased overflow-hidden selection:bg-[#FFD400] selection:text-black;
+          font-family: 'Outfit', sans-serif;
         }
-        #root { 
-            width: 100%; 
-            height: 100%; 
-        }
-        /* Fix for potential input styling issues */
-        input:focus { outline: none; }
+      }
+      @layer utilities {
         .hide-scrollbar::-webkit-scrollbar { display: none; }
-        
+        .hide-scrollbar { -ms-overflow-style: none; scrollbar-width: none; }
         .premium-gold-text {
           background: linear-gradient(to bottom, #FFD400 0%, #FFB000 50%, #D48806 100%);
           -webkit-background-clip: text;
           -webkit-text-fill-color: transparent;
           text-shadow: 0 4px 8px rgba(0,0,0,0.3);
         }
-
-        /* Global Font Smoothing */
-        * {
-          -webkit-font-smoothing: antialiased;
-          -moz-osx-font-smoothing: grayscale;
-        }
+      }
     </style>
 <script type="importmap">
 {
@@ -69,6 +58,7 @@
 </head>
 <body>
     <div id="root"></div>
-    <script type="module" src="/index.tsx"></script>
+    <script type="module" src="./index.tsx"></script>
+<script type="module" src="/index.tsx"></script>
 </body>
 </html>
