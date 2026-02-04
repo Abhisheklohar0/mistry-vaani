@@ -1,19 +1,20 @@
 
 import React from 'react';
-import { Search, Mic, Info, Lock } from 'lucide-react';
+import { Search, Bell, Tv, Lock, Info } from 'lucide-react';
 import { Screen } from '../types';
-import { TABS, THEME, APP_NAME } from '../constants';
+import { TABS, APP_NAME } from '../constants';
 
 interface LayoutProps {
   children: React.ReactNode;
   activeScreen: Screen;
   onTabChange: (screen: Screen) => void;
   onToggleDocs: () => void;
+  onSearchClick: () => void;
   isPremium: boolean;
   activePlanAmount: number;
 }
 
-const Layout: React.FC<LayoutProps> = ({ children, activeScreen, onTabChange, onToggleDocs, isPremium, activePlanAmount }) => {
+const Layout: React.FC<LayoutProps> = ({ children, activeScreen, onTabChange, onToggleDocs, onSearchClick, isPremium, activePlanAmount }) => {
   const isShorts = activeScreen === Screen.SHORTS;
   const isSearch = activeScreen === Screen.SEARCH;
   const hasBasicPlan = activePlanAmount > 0;
@@ -21,25 +22,37 @@ const Layout: React.FC<LayoutProps> = ({ children, activeScreen, onTabChange, on
   return (
     <div className="flex flex-col h-full w-full bg-[#0E0E0B] text-white relative">
       {!isShorts && !isSearch && (
-        <div className="px-6 h-16 flex items-center justify-between z-20 border-b border-[#242420]/50">
-          <div className="flex items-center space-x-3">
-            <div className="relative">
-              <svg width="28" height="28" viewBox="0 0 100 100" fill="none">
-                {/* Outer V */}
+        <div className="flex flex-col z-50 sticky top-0 shrink-0">
+          {/* Top Brand Bar with Info Button - Restored */}
+          <header className="px-6 h-14 flex items-center justify-between bg-black border-b border-white/[0.02]">
+            <div className="flex items-center space-x-3">
+              <svg width="24" height="24" viewBox="0 0 100 100" fill="none">
                 <path d="M15 20L50 85L85 20" stroke="#FFD400" strokeWidth="8" strokeLinecap="round" strokeLinejoin="round" />
-                {/* Inner V */}
-                <path d="M30 20L50 60L70 20" stroke="#FFD400" strokeWidth="3" strokeLinecap="round" strokeLinejoin="round" opacity="0.6" />
-                {/* Sparkles */}
-                <circle cx="15" cy="20" r="3" fill="white" className="animate-pulse shadow-lg" />
-                <circle cx="85" cy="20" r="3" fill="white" className="animate-pulse shadow-lg" />
               </svg>
-              <div className="absolute top-0 left-0 w-full h-full bg-[#FFD400]/20 blur-lg rounded-full -z-10"></div>
+              <span className="text-sm font-black tracking-[0.2em] uppercase text-white/90">{APP_NAME}</span>
             </div>
-            <span className="text-xl font-black tracking-tighter uppercase">{APP_NAME}</span>
-          </div>
-          <button onClick={onToggleDocs} className="p-2 bg-[#1C1C18] rounded-full border border-[#242420]">
-            <Info size={20} className="text-[#A0A096]" />
-          </button>
+            <button 
+              onClick={onToggleDocs}
+              className="w-8 h-8 rounded-full bg-white/5 flex items-center justify-center text-[#555550] hover:text-[#FFD400] transition-colors"
+            >
+              <Info size={16} />
+            </button>
+          </header>
+
+          {/* Action Bar - Logo removed from here as requested */}
+          <header className="px-6 h-14 flex items-center justify-between bg-black/95 backdrop-blur-xl border-b border-white/[0.03]">
+            <div className="flex items-center">
+              <span className="text-lg font-black tracking-tighter uppercase text-white">{APP_NAME}</span>
+            </div>
+            
+            <div className="flex items-center space-x-6">
+              <Tv size={20} className="text-[#A0A096] opacity-80" />
+              <Bell size={20} className="text-[#A0A096] opacity-80" />
+              <button onClick={onSearchClick}>
+                <Search size={20} className="text-[#A0A096] opacity-80" />
+              </button>
+            </div>
+          </header>
         </div>
       )}
 
