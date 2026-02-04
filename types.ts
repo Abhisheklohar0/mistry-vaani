@@ -54,14 +54,18 @@ export interface ContentCard {
   id: string;
   title: string;
   creator: string;
+  creatorAvatar?: string;
   thumbnail: string;
   progress?: number;
   duration?: string;
   views?: string;
+  timeAgo?: string;
+  likesCount?: string;
+  description?: string;
   isPremium?: boolean;
   category?: string;
   rank?: number;
-  videoUrl?: string; // New: Support for long-form video playback
+  videoUrl?: string;
 }
 
 export interface Short {
