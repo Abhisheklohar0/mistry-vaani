@@ -24,6 +24,7 @@ const App: React.FC = () => {
   });
   const [activeScreen, setActiveScreen] = useState<Screen>(() => {
     if (!localStorage.getItem('vaani_user')) return Screen.LOGIN;
+    // Start unsubscribed users on the Premium screen to prompt trial
     const currentPlan = Number(localStorage.getItem('vaani_plan_amount')) || 0;
     return currentPlan > 0 ? Screen.HOME : Screen.PREMIUM;
   });
@@ -46,6 +47,7 @@ const App: React.FC = () => {
     };
     localStorage.setItem('vaani_user', JSON.stringify(newUser));
     setUser(newUser);
+    // Redirect new login to Premium if they don't have a plan
     setActiveScreen(Screen.PREMIUM);
   };
 
@@ -60,10 +62,11 @@ const App: React.FC = () => {
     setIsPremium(true);
     setActivePlanAmount(amount);
     
+    // If standard plan activated, unlock and move to Home
     if (amount === 499) {
       setActiveScreen(Screen.HOME);
     } else if (amount >= 15000) {
-      setActiveScreen(Screen.PREMIUM); 
+      setActiveScreen(Screen.PREMIUM); // Elite view
     }
   };
 
@@ -72,6 +75,7 @@ const App: React.FC = () => {
     setActiveScreen(Screen.POST_DETAIL);
   };
 
+  // Guard navigation for locked tabs
   const handleTabChange = (screen: Screen) => {
     const isLockedTab = screen === Screen.HOME || screen === Screen.SHORTS;
     if (isLockedTab && activePlanAmount === 0) {
@@ -112,12 +116,11 @@ const App: React.FC = () => {
           activeScreen={activeScreen} 
           onTabChange={handleTabChange} 
           onToggleDocs={() => setShowDocs(true)} 
-          onSearchClick={() => setActiveScreen(Screen.SEARCH)}
           isPremium={isPremium}
           activePlanAmount={activePlanAmount}
         >
           {activeScreen === Screen.SEARCH && <SearchScreen onBack={() => setActiveScreen(Screen.HOME)} />}
-          {activeScreen === Screen.HOME && <HomeContent onPostClick={handlePostClick} />}
+          {activeScreen === Screen.HOME && <HomeContent onSearchClick={() => setActiveScreen(Screen.SEARCH)} onPostClick={handlePostClick} />}
           {activeScreen === Screen.SHORTS && <ShortsContent />}
           {activeScreen === Screen.PREMIUM && (
             <PremiumContent 
